@@ -1,0 +1,101 @@
+# =========================================
+# pyproject.toml ― csv2json CLI プロジェクト
+# =========================================
+
+[build-system]
+requires      = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name            = "csv2json"
+version         = "0.1.0"
+description     = "Convert CSV files to JSON array via a simple CLI."
+readme          = "README.md"
+requires-python = ">=3.9"
+keywords        = ["csv", "json", "cli", "data-conversion"]
+license         = {text = "MIT"}
+
+authors = [
+  {name = "Shota Nemoto", email = "shota@example.com"},
+]
+
+# ――― 本番依存 ―――
+dependencies = [
+  "chardet>=5.2.0",
+]
+
+# ――― 開発／テスト依存 ―――
+[project.optional-dependencies]
+dev = [
+  # Quality & tooling
+  "black>=24.4.0",
+  "ruff>=0.4.0",
+  "mypy>=1.10.0",
+  "pre-commit>=3.7",
+
+  # Testing
+  "pytest>=8.0.0",
+
+  # Nice-to-have features
+  "tabulate>=0.9.0",
+  "rich>=13.7.0",
+
+  # Build / publish helpers
+  "build>=1.2.1",
+  "twine>=5.0.0",
+]
+
+# ――― CLI エントリポイント ―――
+[project.scripts]
+csv2json = "csv2json.cli:main"
+
+# -----------------------------------------
+# setuptools の発見ルール
+# -----------------------------------------
+[tool.setuptools.packages.find]
+where   = ["."]
+include = ["csv2json*"]
+exclude = ["csv2json/tests*"] 
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+# -----------------------------------------
+# Black (formatter)
+# -----------------------------------------
+[tool.black]
+line-length    = 88
+target-version = ["py39"]
+
+# -----------------------------------------
+# Ruff (linter & import sorter)
+# -----------------------------------------
+[tool.ruff]
+line-length = 88
+lint.select      = ["E", "F", "I"]          # エラー・フォーマット・import
+fix         = true
+
+# -----------------------------------------
+# mypy (type checker)
+# -----------------------------------------
+[tool.mypy]
+python_version       = "3.13"
+strict               = true
+show_error_codes     = true
+check_untyped_defs   = true
+disallow_any_generics = true
+
+# -----------------------------------------
+# pytest
+# -----------------------------------------
+[tool.pytest.ini_options]
+addopts   = "-q --cov=csv2json --cov-report=term-missing"
+testpaths = ["csv2json/tests"]
+
+# -----------------------------------------
+# coverage.py（任意）
+# -----------------------------------------
+[tool.coverage.run]
+branch = true
+source = ["csv2json"]

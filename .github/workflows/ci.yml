@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]       # 任意
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python: ["3.11", "3.12", "3.13"]   # 将来バージョンを追加可
+    steps:
+    # 1) リポジトリ取得
+    - uses: actions/checkout@v4                         # :contentReference[oaicite:0]{index=0}
+
+    # 2) Python を指定バージョンでセットアップ
+    - uses: actions/setup-python@v5                     # :contentReference[oaicite:1]{index=1}
+      with:
+        python-version: ${{ matrix.python }}
+        cache: pip
+
+    # 3) 依存をインストール（editable + dev）
+    - name: Install deps
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .[dev]
+
+    # 4) pre-commit（フォーマッタ & Linter）
+    - name: pre-commit
+      run: pre-commit run --all-files --show-diff-on-failure
+
+    # 5) 型チェック
+    - name: mypy
+      run: mypy csv2json
+
+    # 6) テスト & カバレッジ
+    - name: pytest
+      run: pytest --cov=csv2json --cov-report=xml
+
+    # 7) （オプション）カバレッジを Codecov にアップ
+    - name: Upload coverage
+      if: matrix.python == '3.13'
+      uses: codecov/codecov-action@v4
+      with:
+        files: coverage.xml
+        token: ${{ secrets.CODECOV_TOKEN }}   # リポジトリ Secrets に追加

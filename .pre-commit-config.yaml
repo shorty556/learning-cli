@@ -1,0 +1,29 @@
+repos:
+  # 1) isort ―――――――――――――――――――――――――――――――
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ["--profile=black"]
+        autostage: true
+
+  # 2) black ―――――――――――――――――――――――――――――――
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        autostage: true
+
+  # 3) ruff（lint だけ／import 並べ替えは isort に任せる）
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff
+        args: ["--fix"]          # ← 自動修正も有効
+
+  # 4) mypy ── “いったん飛ばす” なら ↓ をコメントアウト -------------
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v1.10.0
+  #   hooks:
+  #     - id: mypy
+  #       args: [--strict]

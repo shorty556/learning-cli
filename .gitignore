@@ -1,0 +1,31 @@
+# ------------------------------------
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Virtual envs
+.venv/
+env/
+venv/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+
+# Test / coverage
+htmlcov/
+.coverage
+*.cover
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# OS noise
+.DS_Store
+Thumbs.db
