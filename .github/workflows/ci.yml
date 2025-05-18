@@ -5,6 +5,7 @@ on:
     branches: [main, develop]       # 任意
   pull_request:
     branches: ["*"]
+  workflow_dispatch:
 
 jobs:
   test:
@@ -35,6 +36,7 @@ jobs:
 
     # 5) 型チェック
     - name: mypy
+      if: ${{ env.ENABLE_MYPY == 'true' }}   # ← mypy を実行するかどうか
       run: mypy csv2json
 
     # 6) テスト & カバレッジ
